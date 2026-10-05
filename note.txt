@@ -1,0 +1,84 @@
+Problem #1 — Bernadette: "Already up to date"
+What went wrong: git pull only downloads from the remote. Bernadette
+changed her local main but never pushed — so remote main had nothing new, and
+Git correctly said "Already up to date". Pull can't see unpushed commits.
+Fix: push first, then pull.
+pwd
+mkdir ITEC111-Lastname
+cd ITEC111-Lastname
+mkdir Problem-1
+cd Problem-1
+pwd # confirm location
+git init
+touch index.html
+(edit index.html — add content)
+git add index.html
+git commit -m "Added File"
+git branch -m main
+git remote add origin <paste-github-url> # (repo itself is created on
+the GitHub website)
+git push -u origin main # push + set upstream
+git branch feature-branch
+git checkout feature-branch
+touch style.css
+(edit style.css)
+git add style.css
+git commit -m "Added stylesheet"
+git checkout main
+(edit index.html — additional changes)
+git add index.html
+git commit -m "Update main content"
+git checkout feature-branch
+git pull origin main # → "Already up to date" (local main
+was never pushed!)
+# --- FIX ---
+git checkout main
+git push origin main # send local main's commits up
+git checkout feature-branch
+git pull origin main # changes arrive
+git log --oneline # verify
+Problem #2 — Veronica: broken hover after 6th commit
+What went wrong: On the 6th commit ("Added New Button Click This with Simple
+Style"), the "Click Me" button's hover effect stopped working. It worked in an earlier
+commit.
+Fix: use git log --oneline to review history, git show / git checkout <hash> to
+find the last working version, then git reset --hard <working-hash> to go back
+to it.
+pwd
+mkdir Problem-2
+cd Problem-2
+pwd
+git init
+touch index.html
+git add index.html
+git commit -m "Track index.html"
+touch style.css
+git add style.css
+git commit -m "Track style.css"
+(edit index.html — HTML structure + link stylesheet + "Click Me"
+button, class btn_clickMe)
+git add index.html
+git commit -m "Added Button Click Me"
+(edit style.css — styling for the Click Me button)
+git add style.css
+git commit -m "Added Styling for Button Click Me"
+(edit index.html — add "Click Here" button, class btn_clickHere)
+(edit style.css — styling for the Click Here button)
+git add index.html style.css
+git commit -m "Added new Button Click Here and Styling for Button Click
+Here"
+(edit index.html — add "Click This" button)
+(edit style.css — its styling)
+git add .
+git commit -m "Added New Button Click This with Simple Style"
+git log --oneline # 6 commits listed
+# hover effect broken! hunt the working version:
+git show <hash> # inspect a commit's changes
+git checkout <hash> # visit it, test the hover in
+browser
+git checkout main # come back
+git diff <old-hash> <new-hash> -- style.css # find where the hover
+rule broke
+git reset --hard <working-hash> # back to the working version
+git log --oneline # confirm
+(Replace <hash> with real commit hashes from git log --oneline.)
